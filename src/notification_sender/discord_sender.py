@@ -28,6 +28,69 @@ DISCORD_CHUNK_SLEEP_SECONDS = 1
 # 緊湊排版：發送前移除多餘空行，手機上一屏看完（程式碼區塊內保留）
 DISCORD_COMPACT_LAYOUT = True
 
+# 發送前統一轉繁體（台灣用語）。優先使用 OpenCC（pip install opencc-python-reimplemented），
+# 未安裝時退回下方內建對照表；兩者之後都會再套用台灣交易用語對照。
+DISCORD_FORCE_TRADITIONAL = True
+_S2T_SIMPLIFIED = (
+    "与专业两严个为义亏亿仅仓优传价体关写冲况净减凭划则创别务动势区单压参发变叙号后响"
+    "国场块处备复宽对将币师应废并开异弃弹强当态总执扩扰护报换据撑数断无时显暂权条构标"
+    "汇洁测涨温点炼热状现琼盘码确离称简纪纯纳线组结给统绪续维综编缩职联荡获补装观览触"
+    "计认议讯论设证评识词试话该语说请读谁调谨负责败货资赚趋跃转轮较辑输边达过还进适选"
+    "逻释钱键间闻险韩须领题额风于内实员错误视尝龙头规东经验带储导电拥挤车链债际网广周"
+    "记阶节产御长张献贡递归类丢书从会检环种积级细缀缓这隐页项预飞万临乐买仪侧决准剧劲"
+    "卖历启坏坚够录彻恶惯愿战抛损机杀来极栏术沪浓润潜独监税稳筹红约继绩缘舆营蕴虽轻运"
+    "远迹随难饮飙驱阴库庞属倾质财赁"
+)
+_S2T_TRADITIONAL = (
+    "與專業兩嚴個為義虧億僅倉優傳價體關寫衝況淨減憑劃則創別務動勢區單壓參發變敘號後響"
+    "國場塊處備復寬對將幣師應廢並開異棄彈強當態總執擴擾護報換據撐數斷無時顯暫權條構標"
+    "匯潔測漲溫點煉熱狀現瓊盤碼確離稱簡紀純納線組結給統緒續維綜編縮職聯盪獲補裝觀覽觸"
+    "計認議訊論設證評識詞試話該語說請讀誰調謹負責敗貨資賺趨躍轉輪較輯輸邊達過還進適選"
+    "邏釋錢鍵間聞險韓須領題額風於內實員錯誤視嘗龍頭規東經驗帶儲導電擁擠車鏈債際網廣週"
+    "記階節產禦長張獻貢遞歸類丟書從會檢環種積級細綴緩這隱頁項預飛萬臨樂買儀側決準劇勁"
+    "賣歷啟壞堅夠錄徹惡慣願戰拋損機殺來極欄術滬濃潤潛獨監稅穩籌紅約繼績緣輿營蘊雖輕運"
+    "遠跡隨難飲飆驅陰庫龐屬傾質財賃"
+)
+_S2T_TABLE = str.maketrans(_S2T_SIMPLIFIED, _S2T_TRADITIONAL)
+_TW_TERMS = (
+    ("板塊", "類股"), ("信號", "訊號"), ("A股", "陸股"), ("倉位", "部位"), ("回撤", "回檔"),
+    ("成交額", "成交金額"), ("數據", "資料"), ("信息", "資訊"), ("接口", "介面"),
+    ("現金分紅", "現金股利"), ("分紅", "配息"), ("股息率", "殖利率"), ("同比", "年增率"),
+    ("換手率", "週轉率"), ("買入", "買進"), ("減倉", "減碼"), ("兜底", "保底"),
+    ("關系", "關係"), ("儀表盤", "儀表板"), ("鏈接", "連結"),
+    ("軟件", "軟體"), ("硬件", "硬體"), ("默認", "預設"), ("設置", "設定"), ("質量", "品質"),
+)
+_opencc_converter = None
+_opencc_checked = False
+
+
+def _get_opencc_converter():
+    global _opencc_converter, _opencc_checked
+    if _opencc_checked:
+        return _opencc_converter
+    _opencc_checked = True
+    try:
+        from opencc import OpenCC
+    except ImportError:
+        return None
+    for config in ("s2twp", "s2twp.json"):
+        try:
+            _opencc_converter = OpenCC(config)
+            break
+        except Exception:
+            continue
+    return _opencc_converter
+
+
+def to_traditional(text: str) -> str:
+    """簡體轉台灣繁體；內建對照表只涵蓋常用字，建議安裝 OpenCC 以獲得完整詞彙轉換。"""
+    converter = _get_opencc_converter()
+    text = converter.convert(text) if converter else text.translate(_S2T_TABLE)
+    for old, new in _TW_TERMS:
+        text = text.replace(old, new)
+    return text
+
+
 
 class DiscordSender:
 
@@ -91,6 +154,8 @@ class DiscordSender:
         sanitized_content = strip_hidden_markdown_metadata(content).strip()
         if DISCORD_COMPACT_LAYOUT:
             sanitized_content = self._compact_content(sanitized_content)
+        if DISCORD_FORCE_TRADITIONAL:
+            sanitized_content = to_traditional(sanitized_content)
         if not sanitized_content:
             logger.warning("Discord 訊息內容為空，跳過推送")
             return False

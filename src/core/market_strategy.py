@@ -38,9 +38,9 @@ class MarketStrategyBlueprint:
 
         return (
             f"## Strategy Blueprint: {self.title}\n"
-            f"{self.positioning}\n\n"
-            f"### Strategy Principles\n{principles_text}\n\n"
-            f"### Analysis Dimensions\n{dimensions_text}\n\n"
+            f"{self.positioning}\n"
+            f"### Strategy Principles\n{principles_text}\n"
+            f"### Analysis Dimensions\n{dimensions_text}\n"
             f"### Action Framework\n{action_text}"
         )
 
@@ -48,39 +48,39 @@ class MarketStrategyBlueprint:
         """Render blueprint as markdown section for template fallback report."""
         dims = "\n".join([f"- **{dim.name}**: {dim.objective}" for dim in self.dimensions])
         section_title = "### VI. Strategy Framework" if self.region == "us" else "### 六、策略框架"
-        return f"{section_title}\n{dims}\n"
+        return f"{section_title}\n{dims}"
 
 
 CN_BLUEPRINT = MarketStrategyBlueprint(
     region="cn",
-    title="A股市场三段式复盘策略",
-    positioning="聚焦指数趋势、资金博弈与板块轮动，形成次日交易计划。",
+    title="陸股市場三段式復盤策略",
+    positioning="聚焦指數趨勢、資金博弈與類股輪動，形成次日交易計畫。",
     principles=[
-        "先看指数方向，再看量能结构，最后看板块持续性。",
-        "结论必须映射到仓位、节奏与风险控制动作。",
-        "判断使用当日数据与近3日新闻，不臆测未验证信息。",
+        "先看指數方向，再看量能結構，最後看類股持續性。",
+        "結論必須映射到部位、節奏與風險控制動作。",
+        "判斷使用當日資料與近3日新聞，不臆測未驗證資訊。",
     ],
     dimensions=[
         StrategyDimension(
-            name="趋势结构",
-            objective="判断市场处于上升、震荡还是防守阶段。",
-            checkpoints=["上证/深证/创业板是否同向", "放量上涨或缩量下跌是否成立", "关键支撑阻力是否被突破"],
+            name="趨勢結構",
+            objective="判斷市場處於上升、震盪還是防守階段。",
+            checkpoints=["上證/深證/創業板是否同向", "放量上漲或縮量下跌是否成立", "關鍵支撐阻力是否被突破"],
         ),
         StrategyDimension(
-            name="资金情绪",
-            objective="识别短线风险偏好与情绪温度。",
-            checkpoints=["涨跌家数与涨跌停结构", "成交额是否扩张", "高位股是否出现分歧"],
+            name="資金情緒",
+            objective="識別短線風險偏好與情緒溫度。",
+            checkpoints=["漲跌家數與漲跌停結構", "成交金額是否擴張", "高位股是否出現分歧"],
         ),
         StrategyDimension(
-            name="主线板块",
-            objective="提炼可交易主线与规避方向。",
-            checkpoints=["领涨板块是否具备事件催化", "板块内部是否有龙头带动", "领跌板块是否扩散"],
+            name="主線類股",
+            objective="提煉可交易主線與規避方向。",
+            checkpoints=["領漲類股是否具備事件催化", "類股內部是否有龍頭帶動", "領跌類股是否擴散"],
         ),
     ],
     action_framework=[
-        "进攻：指数共振上行 + 成交额放大 + 主线强化。",
-        "均衡：指数分化或缩量震荡，控制仓位并等待确认。",
-        "防守：指数转弱 + 领跌扩散，优先风控与减仓。",
+        "進攻：指數共振上行 + 成交金額放大 + 主線強化。",
+        "均衡：指數分化或縮量震盪，控制部位並等待確認。",
+        "防守：指數轉弱 + 領跌擴散，優先風控與減碼。",
     ],
 )
 
@@ -131,101 +131,101 @@ US_BLUEPRINT = MarketStrategyBlueprint(
 
 HK_BLUEPRINT = MarketStrategyBlueprint(
     region="hk",
-    title="港股市场三段式复盘策略",
-    positioning="聚焦恒生指数趋势、南向资金博弈与板块轮动，形成次日交易计划。",
+    title="港股市場三段式復盤策略",
+    positioning="聚焦恒生指數趨勢、南向資金博弈與類股輪動，形成次日交易計畫。",
     principles=[
-        "先看恒指/恒科/国企指数方向，再看南向资金情绪，最后看板块持续性。",
-        "结论必须映射到仓位、节奏与风险控制动作。",
-        "判断使用当日数据与近3日新闻，不臆测未验证信息。",
+        "先看恒指/恒科/國企指數方向，再看南向資金情緒，最後看類股持續性。",
+        "結論必須映射到部位、節奏與風險控制動作。",
+        "判斷使用當日資料與近3日新聞，不臆測未驗證資訊。",
     ],
     dimensions=[
         StrategyDimension(
-            name="趋势结构",
-            objective="判断市场处于上升、震荡还是防守阶段。",
-            checkpoints=["恒指/恒科/国企指数是否同向", "放量上涨或缩量下跌是否成立", "关键支撑阻力是否被突破"],
+            name="趨勢結構",
+            objective="判斷市場處於上升、震盪還是防守階段。",
+            checkpoints=["恒指/恒科/國企指數是否同向", "放量上漲或縮量下跌是否成立", "關鍵支撐阻力是否被突破"],
         ),
         StrategyDimension(
-            name="资金情绪",
-            objective="识别南向资金风险偏好与情绪温度。",
-            checkpoints=["南向资金净流入方向与规模", "港元汇率与内地政策含义", "市场广度与龙头集中度"],
+            name="資金情緒",
+            objective="識別南向資金風險偏好與情緒溫度。",
+            checkpoints=["南向資金淨流入方向與規模", "港元匯率與中國大陸政策含義", "市場廣度與龍頭集中度"],
         ),
         StrategyDimension(
-            name="主线板块",
-            objective="提炼可交易主线与规避方向。",
-            checkpoints=["科技/互联网平台趋势持续性", "金融/地产对政策转向的敏感度", "防御与成长因子轮动"],
+            name="主線類股",
+            objective="提煉可交易主線與規避方向。",
+            checkpoints=["科技/網路平台趨勢持續性", "金融/地產對政策轉向的敏感度", "防禦與成長因子輪動"],
         ),
     ],
     action_framework=[
-        "进攻：恒指共振上行 + 南向资金持续流入 + 主线强化。",
-        "均衡：指数分化或缩量震荡，控制仓位并等待确认。",
-        "防守：指数转弱 + 波动率上升，优先风控与减仓。",
+        "進攻：恒指共振上行 + 南向資金持續流入 + 主線強化。",
+        "均衡：指數分化或縮量震盪，控制部位並等待確認。",
+        "防守：指數轉弱 + 波動率上升，優先風控與減碼。",
     ],
 )
 
 
 JP_BLUEPRINT = MarketStrategyBlueprint(
     region="jp",
-    title="日本市场三段式复盘策略",
-    positioning="聚焦日经225、东证指数、汇率与全球风险偏好，形成次日交易计划。",
+    title="日本市場三段式復盤策略",
+    positioning="聚焦日經225、東證指數、匯率與全球風險偏好，形成次日交易計畫。",
     principles=[
-        "先看日经225与TOPIX是否同向，再看日元、半导体/出口链与金融股表现。",
-        "把指数结论映射到仓位、节奏与风险控制动作。",
-        "只基于可得指数、新闻和价格行为判断，不臆造市场广度或板块统计。",
+        "先看日經225與TOPIX是否同向，再看日元、半導體/出口鏈與金融股表現。",
+        "把指數結論映射到部位、節奏與風險控制動作。",
+        "只基於可得指數、新聞和價格行為判斷，不臆造市場廣度或類股統計。",
     ],
     dimensions=[
         StrategyDimension(
-            name="趋势结构",
-            objective="判断日本市场处于上攻、震荡还是防守阶段。",
-            checkpoints=["日经225/TOPIX是否同向", "指数是否突破或跌破关键区间", "大盘权重与成长链是否共振"],
+            name="趨勢結構",
+            objective="判斷日本市場處於上攻、震盪還是防守階段。",
+            checkpoints=["日經225/TOPIX是否同向", "指數是否突破或跌破關鍵區間", "大盤權重與成長鏈是否共振"],
         ),
         StrategyDimension(
-            name="宏观与汇率",
-            objective="识别日元、利率和全球风险偏好对权益市场的影响。",
-            checkpoints=["日元方向对出口链的影响", "日本央行和美债利率叙事", "海外科技股与半导体链映射"],
+            name="宏觀與匯率",
+            objective="識別日元、利率和全球風險偏好對權益市場的影響。",
+            checkpoints=["日元方向對出口鏈的影響", "日本央行和美債利率敘事", "海外科技股與半導體鏈映射"],
         ),
         StrategyDimension(
-            name="主题线索",
-            objective="提炼可延续主线与需要规避的拥挤方向。",
-            checkpoints=["半导体/自动化/汽车链持续性", "金融与内需股是否轮动", "新闻催化是否支撑价格行为"],
+            name="主題線索",
+            objective="提煉可延續主線與需要規避的擁擠方向。",
+            checkpoints=["半導體/自動化/汽車鏈持續性", "金融與內需股是否輪動", "新聞催化是否支撐價格行為"],
         ),
     ],
     action_framework=[
-        "进攻：主要指数共振上行 + 外部风险偏好改善 + 主线强化。",
-        "均衡：指数分化或汇率扰动，降低追涨并等待确认。",
-        "防守：主要指数转弱或外部风险升温，优先控制仓位。",
+        "進攻：主要指數共振上行 + 外部風險偏好改善 + 主線強化。",
+        "均衡：指數分化或匯率擾動，降低追漲並等待確認。",
+        "防守：主要指數轉弱或外部風險升溫，優先控制部位。",
     ],
 )
 
 KR_BLUEPRINT = MarketStrategyBlueprint(
     region="kr",
-    title="韩国市场三段式复盘策略",
-    positioning="聚焦 KOSPI、KOSDAQ、半导体权重与全球科技风险偏好，形成次日交易计划。",
+    title="韓國市場三段式復盤策略",
+    positioning="聚焦 KOSPI、KOSDAQ、半導體權重與全球科技風險偏好，形成次日交易計畫。",
     principles=[
-        "先看 KOSPI/KOSDAQ 是否同向，再看三星电子、SK 海力士等权重线索。",
-        "区分指数 beta、半导体周期和成长股风险偏好的贡献。",
-        "只基于可得指数、新闻和价格行为判断，不臆造市场广度或板块统计。",
+        "先看 KOSPI/KOSDAQ 是否同向，再看三星電子、SK 海力士等權重線索。",
+        "區分指數 beta、半導體週期和成長股風險偏好的貢獻。",
+        "只基於可得指數、新聞和價格行為判斷，不臆造市場廣度或類股統計。",
     ],
     dimensions=[
         StrategyDimension(
-            name="趋势结构",
-            objective="判断韩国市场处于上攻、震荡还是防守阶段。",
-            checkpoints=["KOSPI/KOSDAQ 是否同向", "权重股是否支撑指数", "关键支撑阻力是否被突破"],
+            name="趨勢結構",
+            objective="判斷韓國市場處於上攻、震盪還是防守階段。",
+            checkpoints=["KOSPI/KOSDAQ 是否同向", "權重股是否支撐指數", "關鍵支撐阻力是否被突破"],
         ),
         StrategyDimension(
-            name="科技周期",
-            objective="识别半导体、AI 硬件和全球科技股对韩国市场的映射。",
-            checkpoints=["存储/半导体链新闻催化", "美股科技方向联动", "外资风险偏好变化"],
+            name="科技週期",
+            objective="識別半導體、AI 硬體和全球科技股對韓國市場的映射。",
+            checkpoints=["記憶體/半導體鏈新聞催化", "美股科技方向聯動", "外資風險偏好變化"],
         ),
         StrategyDimension(
-            name="主题线索",
-            objective="提炼可延续主线与需要规避的拥挤方向。",
-            checkpoints=["电池/汽车/互联网是否轮动", "KOSDAQ 成长股风险偏好", "新闻催化是否支撑价格行为"],
+            name="主題線索",
+            objective="提煉可延續主線與需要規避的擁擠方向。",
+            checkpoints=["電池/汽車/網路是否輪動", "KOSDAQ 成長股風險偏好", "新聞催化是否支撐價格行為"],
         ),
     ],
     action_framework=[
-        "进攻：KOSPI/KOSDAQ 共振上行 + 科技权重确认 + 外部风险偏好改善。",
-        "均衡：指数或权重股分化，控制仓位并等待确认。",
-        "防守：科技权重转弱或外部风险升温，优先控制回撤。",
+        "進攻：KOSPI/KOSDAQ 共振上行 + 科技權重確認 + 外部風險偏好改善。",
+        "均衡：指數或權重股分化，控制部位並等待確認。",
+        "防守：科技權重轉弱或外部風險升溫，優先控制回檔。",
     ],
 )
 

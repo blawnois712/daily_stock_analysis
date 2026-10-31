@@ -163,7 +163,7 @@ class DiscordSender:
         payload = {
             'content': content,
             'username': '仿生助手前瞻',
-            'avatar_url': 'https://picsum.photos/200'
+            'avatar_url': 'https://ibb.co/s9vJNKGb'
         }
 
         return self._post_discord_message(
